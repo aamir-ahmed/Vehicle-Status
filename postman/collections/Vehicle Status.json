@@ -1,0 +1,1531 @@
+{
+	"info": {
+		"_postman_id": "ffa28cc5-1103-46a5-8d45-b6c5c2201325",
+		"name": "Vehicle Status",
+		"description": "Keynote presentation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "16863350-ffa28cc5-1103-46a5-8d45-b6c5c2201325"
+	},
+	"item": [
+		{
+			"name": "status",
+			"item": [
+				{
+					"name": "battery",
+					"item": [
+						{
+							"name": "Battery",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.include.all.keys('cca', 'charging', 'health', 'install', 'overvolt', 'type', 'voltage');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Charging status is a boolean value\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.have.property('charging').that.is.a('boolean');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Overvoltage status is a boolean value\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData.overvolt).to.be.a('boolean');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Health status is a non-empty string or null\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.health).to.satisfy((value) => {",
+											"        return typeof value === 'string' || value === null;",
+											"    }, \"Health status should be a non-empty string or null\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8fc4b88a-66b7-4cb8-93da-905ce117eb3d",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/battery/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"battery",
+										""
+									]
+								},
+								"description": "Returns a status and health report for all connected battery elements (includes EV batteries as well). \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "393aa002-eb84-48ed-9787-5b0886f42c9d",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/battery/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"battery",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "9a61aa74-bc58-480c-8f6f-75793612223c"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"cca\": 600,\n  \"charging\": true,\n  \"health\": \"good\",\n  \"install\": \"2020-02-02\",\n  \"overvolt\": false,\n  \"type\": \"AGM\",\n  \"voltage\": 14.2\n}"
+								},
+								{
+									"id": "e5db3bbe-7075-4ea6-ab08-f2a06d6e7333",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/battery/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"battery",
+												""
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "bbef434e-385a-44c9-b510-a42c5ef5e6d1"
+				},
+				{
+					"name": "doors",
+					"item": [
+						{
+							"name": "Doors",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - front, rear, left, and right\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData).to.have.property('front');",
+											"  pm.expect(responseData).to.have.property('rear');",
+											"  pm.expect(responseData.front).to.have.property('left');",
+											"  pm.expect(responseData.front).to.have.property('right');",
+											"  pm.expect(responseData.rear).to.have.property('left');",
+											"  pm.expect(responseData.rear).to.have.property('right');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Validate that the 'open' values are boolean\", function () {",
+											"    const responseData = pm.response.json();",
+											"",
+											"    pm.expect(responseData.front.left.open).to.be.a('boolean');",
+											"    pm.expect(responseData.front.right.open).to.be.a('boolean');",
+											"    pm.expect(responseData.rear.left.open).to.be.a('boolean');",
+											"    pm.expect(responseData.rear.right.open).to.be.a('boolean');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response indicates if any door is open\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.front.left.open).to.exist.and.to.be.a('boolean');",
+											"  pm.expect(responseData.front.right.open).to.exist.and.to.be.a('boolean');",
+											"  pm.expect(responseData.rear.left.open).to.exist.and.to.be.a('boolean');",
+											"  pm.expect(responseData.rear.right.open).to.exist.and.to.be.a('boolean');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "285ee3ef-c2f6-4268-96ba-13c3fcdcf13c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/doors",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"doors"
+									]
+								},
+								"description": "Returns a status report indicating which, if any doors are open at the time of the request. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "4d8a9b62-61c5-466f-ab27-8d2e13afa2b9",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/doors",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"doors"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "0ec7b0c0-b7a4-4646-859d-d3ff5b9af733"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"front\": {\n    \"left\": {\n      \"open\": true\n    },\n    \"right\": {\n      \"open\": true\n    }\n  },\n  \"rear\": {\n    \"left\": {\n      \"open\": false\n    },\n    \"right\": {\n      \"open\": false\n    }\n  }\n}"
+								},
+								{
+									"id": "b8da2d54-2ae3-4b01-8048-84e608e1ae59",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/doors",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"doors"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "e853278f-2072-4767-af2c-4b93491458cf"
+				},
+				{
+					"name": "engine",
+					"item": [
+						{
+							"name": "Engine",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('running');",
+											"    pm.expect(responseData).to.have.property('rpm');",
+											"    pm.expect(responseData).to.have.property('coolantTemp');",
+											"    pm.expect(responseData).to.have.property('oilTemp');",
+											"    pm.expect(responseData).to.have.property('oilPressure');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Running status is a boolean value\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.running).to.be.a('boolean');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Coolant temperature is within acceptable range\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.coolantTemp).to.exist.and.to.be.a('number');",
+											"    pm.expect(responseData.coolantTemp).to.be.within(0, 100, \"Coolant temperature should be within 0 to 100 degrees\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Oil pressure is a non-negative integer\", function () {",
+											"    const responseData = pm.response.json();",
+											"",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.oilPressure).to.be.a('number');",
+											"    pm.expect(responseData.oilPressure).to.be.at.least(0, \"Oil pressure should be a non-negative integer\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "7326d6cd-2764-40cd-9533-5a20d450be82",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/engine",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"engine"
+									]
+								},
+								"description": "Returns a complete status and health update for the engine. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "d599113b-d180-4b02-890d-aa99ce22271e",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/engine",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"engine"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "36181d4c-f130-4ad8-b608-2e1ef239bb95"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"coolantTemp\": 92,\n  \"oilPressure\": 4,\n  \"oilTemp\": 80,\n  \"rpm\": 800,\n  \"running\": true\n}"
+								},
+								{
+									"id": "a9dd5cb9-5e81-4675-bb4e-2930849ff031",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/engine",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"engine"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "ac4f5498-e966-4a56-8f9a-ef24e1415c4b"
+				},
+				{
+					"name": "fuel",
+					"item": [
+						{
+							"name": "Fuel",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('level');",
+											"    pm.expect(responseData).to.have.property('gas');",
+											"    pm.expect(responseData).to.have.property('pressure');",
+											"    pm.expect(responseData).to.have.property('ethanolContent');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Gas is a boolean value\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.gas).to.be.a('boolean');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Ethanol content is a non-negative number\", function () {",
+											"  const responseData = pm.response.json();",
+											"  pm.expect(responseData.ethanolContent).to.be.a('number');",
+											"  pm.expect(responseData.ethanolContent).to.be.at.least(0, \"Ethanol content should be a non-negative number\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type header is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "ea9fe88a-08e7-4fa2-a7f6-a1a29a0a5536",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/fuel",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"fuel"
+									]
+								},
+								"description": "Returns a status update for the fuel tank. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "58321b77-3a97-4e6e-bd84-24ddf3cdcea8",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/fuel",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"fuel"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "3a476359-a6f3-4ff7-b26b-a739042b48d2"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"ethanolContent\": 5,\n  \"gas\": true,\n  \"level\": 90,\n  \"pressure\": 40\n}"
+								},
+								{
+									"id": "e33f58e2-6e9c-4c19-9dc6-f52371ec6b9b",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/fuel",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"fuel"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "952ac24c-cdaa-4112-b8e1-2b3be4ad31ce"
+				},
+				{
+					"name": "interior",
+					"item": [
+						{
+							"name": "Interior",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - alarm, lights, temp, and gear\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData).to.have.property('alarm');",
+											"  pm.expect(responseData).to.have.property('lights');",
+											"  pm.expect(responseData).to.have.property('temp');",
+											"  pm.expect(responseData).to.have.property('gear');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Temperature is a non-negative integer\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData.temp).to.be.a('number');",
+											"  pm.expect(responseData.temp).to.be.at.least(0);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type header is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Alarm and lights fields should be either empty or non-empty strings\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.alarm).to.satisfy((value) => value === \"\" || typeof value === \"string\");",
+											"    pm.expect(responseData.lights).to.satisfy((value) => value === \"\" || typeof value === \"string\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "e9bee6d2-b904-4995-8213-6b180694f432",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/interior",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"interior"
+									]
+								},
+								"description": "Returns a complete status update for elements affecting the car cabin. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "63bc8b89-99d9-4c5b-a755-e67225a441b4",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/interior",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"interior"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "05c9e34f-979c-4085-a132-5908ac4fb5fe"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"alarm\": \"off\",\n  \"gear\": \"p\",\n  \"lights\": \"on\",\n  \"temp\": 68\n}"
+								},
+								{
+									"id": "d2abe2d5-d036-4103-b9c0-3d7fc2d76141",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/interior",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"interior"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "f9551ab1-071c-4ccf-b90f-a2cd7b332d85"
+				},
+				{
+					"name": "lights",
+					"item": [
+						{
+							"name": "Lights",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.include.all.keys('daytime', 'sidelight', 'main', 'brights', 'leftSignal', 'rightSignal', 'hazards');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Successful response for car lights status\", function () {",
+											"    pm.expect(pm.response.code).to.equal(200);",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"",
+											"    const responseData = pm.response.json();",
+											"    pm.expect(responseData).to.be.an('object');",
+											"",
+											"    const booleanFields = [\"daytime\", \"sidelight\", \"main\", \"brights\", \"leftSignal\", \"rightSignal\", \"hazards\"];",
+											"    booleanFields.forEach(field => {",
+											"        pm.expect(responseData[field]).to.be.a('boolean');",
+											"    });",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type header is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Verify the response includes the expected set of light statuses\", function () {",
+											"    const expectedLightStatuses = [\"daytime\", \"sidelight\", \"main\", \"brights\", \"leftSignal\", \"rightSignal\", \"hazards\"];",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    expectedLightStatuses.forEach(function(status) {",
+											"        pm.expect(responseData[status]).to.exist;",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "1719b750-70d4-4a1a-8cfa-27debb956bc1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/lights",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"lights"
+									]
+								},
+								"description": "Returns a status update for both internal and external car lights. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "88452ac4-9f86-4620-bd97-061126133d43",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/lights",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"lights"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "e93d24a3-d4b2-4992-9103-7ab46c807b8b"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"brights\": false,\n  \"daytime\": true,\n  \"hazards\": true,\n  \"leftSignal\": true,\n  \"main\": false,\n  \"rightSignal\": true,\n  \"sidelight\": false\n}"
+								},
+								{
+									"id": "6b99bf8f-b9cf-4dba-99e7-4fd4f0c63535",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/lights",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"lights"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "d9989fcb-8375-4a7c-a139-d268570b4ffa"
+				},
+				{
+					"name": "odometer",
+					"item": [
+						{
+							"name": "Odometer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - km and miles\", function () {",
+											"    const responseData = pm.response.json();",
+											"",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.km).to.exist;",
+											"    pm.expect(responseData.miles).to.exist;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Both km and miles are non-negative numbers\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.km).to.be.a('number').and.to.be.at.least(0);",
+											"  pm.expect(responseData.miles).to.be.a('number').and.to.be.at.least(0);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content type is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Validate that the response is successful\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "c5f36ad6-e1e8-4a2d-b991-96f6042b10eb",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/odometer",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"odometer"
+									]
+								},
+								"description": "Returns a the current odometer reading in both km and miles. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "71e5fa83-16e3-48af-9b0c-14c40546bdc3",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/odometer",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"odometer"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "9ae55bef-362a-4e6c-ac71-27d77e7f72d9"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"km\": 100000,\n  \"miles\": \"62000#\"\n}"
+								},
+								{
+									"id": "0430d3dc-7088-41a5-841b-fa55d0ffc50f",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/odometer",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"odometer"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "3a8f0a23-d198-4d7d-b2d3-7e673bafccdf"
+				},
+				{
+					"name": "roof",
+					"item": [
+						{
+							"name": "Roof",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - sunroof and convertible\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData.sunroof).to.exist;",
+											"    pm.expect(responseData.convertible).to.exist;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Sunroof status is valid\", function () {",
+											"  const responseData = pm.response.json();",
+											"",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.sunroof).to.exist.and.to.be.an('object');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Convertible status is valid\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData.convertible).to.exist.and.to.not.be.empty;",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type header is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "1eab034f-08ff-4ee3-bfca-78ffc284b035",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/roof",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"roof"
+									]
+								},
+								"description": "Returns a status update for all connected roof elements. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "7378ff17-021c-49ea-b7d0-87278697c0b2",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/roof",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"roof"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "eedf2bd3-e826-4f35-a805-e7abad5a51ca"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"convertible\": \"up\",\n  \"sunroof\": null\n}"
+								},
+								{
+									"id": "0a017b5c-b6d9-4cb8-84d8-bf019999c3e4",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/roof",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"roof"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "787b5e86-cd4d-4d97-b1a7-b3aef018cd53"
+				},
+				{
+					"name": "windows",
+					"item": [
+						{
+							"name": "Windows",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Response status code is 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response has the required fields - front, rear, left, and right\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData).to.be.an('object');",
+											"    pm.expect(responseData).to.have.property('front');",
+											"    pm.expect(responseData).to.have.property('rear');",
+											"    pm.expect(responseData.front).to.have.property('left');",
+											"    pm.expect(responseData.front).to.have.property('right');",
+											"    pm.expect(responseData.rear).to.have.property('left');",
+											"    pm.expect(responseData.rear).to.have.property('right');",
+											"});",
+											"",
+											"",
+											"pm.test(\"All window elements have the 'open' property\", function () {",
+											"    const responseData = pm.response.json();",
+											"    ",
+											"    pm.expect(responseData.front.left).to.have.property('open');",
+											"    pm.expect(responseData.front.right).to.have.property('open');",
+											"    pm.expect(responseData.rear.left).to.have.property('open');",
+											"    pm.expect(responseData.rear.right).to.have.property('open');",
+											"});",
+											"",
+											"",
+											"pm.test(\"Content-Type header is application/json\", function () {",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response includes the expected number of window elements\", function () {",
+											"  const responseData = pm.response.json();",
+											"  ",
+											"  pm.expect(responseData).to.be.an('object');",
+											"  pm.expect(responseData).to.have.property('front').that.is.an('object').with.property('left').that.is.an('object').with.property('open');",
+											"  pm.expect(responseData).to.have.property('front').that.is.an('object').with.property('right').that.is.an('object').with.property('open');",
+											"  pm.expect(responseData).to.have.property('rear').that.is.an('object').with.property('left').that.is.an('object').with.property('open');",
+											"  pm.expect(responseData).to.have.property('rear').that.is.an('object').with.property('right').that.is.an('object').with.property('open');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "90a9d1f8-c23e-4261-9281-3cbe5a471437",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status/windows",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status",
+										"windows"
+									]
+								},
+								"description": "Returns a status update for all connected window elements. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+							},
+							"response": [
+								{
+									"id": "d55c9144-0a20-430c-b015-f5bb35ebc349",
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/windows",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"windows"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json",
+											"uuid": "7a51b95e-60af-422e-a578-654e34894249"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"front\": {\n    \"left\": {\n      \"open\": true\n    },\n    \"right\": {\n      \"open\": true\n    }\n  },\n  \"rear\": {\n    \"left\": {\n      \"open\": false\n    },\n    \"right\": {\n      \"open\": false\n    }\n  }\n}"
+								},
+								{
+									"id": "caec7f1d-09d0-448c-bc1c-20cce5f31afe",
+									"name": "Internal server error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/status/windows",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"status",
+												"windows"
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "721d5601-ee18-4de8-943e-2c687e75bbe7"
+				},
+				{
+					"name": "Complete Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.battery).to.exist;",
+									"    pm.expect(responseData.doors).to.exist;",
+									"    pm.expect(responseData.engine).to.exist;",
+									"    pm.expect(responseData.fuel).to.exist;",
+									"    pm.expect(responseData.interior).to.exist;",
+									"    pm.expect(responseData.lights).to.exist;",
+									"    pm.expect(responseData.roof).to.exist;",
+									"    pm.expect(responseData.odometer).to.exist;",
+									"    pm.expect(responseData.windows).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"All doors should be either open or closed\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.doors).to.exist.and.to.be.an('object');",
+									"    ",
+									"    const doorStatus = ['front', 'rear'];",
+									"    const doorPosition = ['left', 'right'];",
+									"    ",
+									"    doorStatus.forEach(function(status) {",
+									"        doorPosition.forEach(function(position) {",
+									"            pm.expect(responseData.doors[status][position]).to.exist.and.to.be.oneOf([true, false]);",
+									"        });",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Engine is running and RPM is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.engine.running).to.be.true;",
+									"    pm.expect(responseData.engine.rpm).to.be.a('number').and.to.be.at.least(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Fuel level is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.fuel.level).to.be.a('number');",
+									"    pm.expect(responseData.fuel.level).to.be.at.least(0, \"Fuel level should be a non-negative integer\");",
+									"});",
+									"",
+									"pm.test(\"Fuel pressure is a non-negative number\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.fuel.pressure).to.be.a('number');",
+									"    pm.expect(responseData.fuel.pressure).to.be.at.least(0, \"Fuel pressure should be a non-negative number\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "d6bb9f17-750b-482e-84c5-d80e6903e471",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"status"
+							]
+						},
+						"description": "Upon successful execution, returns a complete status update encompassing all connected elements. \n\nAs status checks are core features of the PM connected car experience, this feature is allowed by default in the customer account settings. However, users do have the option to revoke remote status reporting access to APIs and rely only on the car dashboard indicators. Thus, developers should check for a successful response before continuing with any further workflows.\n"
+					},
+					"response": [
+						{
+							"id": "8cdc1850-177a-46f4-9da8-6caa6c75a140",
+							"name": "Status retrived successfully",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: basic",
+										"key": "Authorization",
+										"value": "Basic <credentials>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/status",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"status"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			],
+			"id": "72ab4ff9-43c4-46cd-94ac-d73047e999f7"
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "{{basicAuthUsername}}",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "{{basicAuthPassword}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"id": "b2dce5ab-6aa0-4641-930d-0ec3ac42cbad",
+			"key": "baseUrl",
+			"value": "https://api.cars.com"
+		}
+	]
+}
